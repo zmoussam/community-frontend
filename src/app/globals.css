@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global reset */
+* {
+  @apply m-0 p-0 box-border;
+}
+
+body {
+  @apply max-w-full overflow-x-hidden;
+}
+
+/* Link styles */
+a {
+  @apply text-inherit no-underline;
+}
+
+/* Container styles */
+/* .container {
+  @apply min-h-screen bg-bg text-textColor;
+} */
+
+/* Wrapper styles with responsive max-width and padding */
+/* .wrapper {
+  @apply  bg-softBg px-4 w-full;
+} */
