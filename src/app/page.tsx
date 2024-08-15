@@ -1,15 +1,15 @@
 "use client";
 import Button from "@/components/button/button";
 import Footer from "@/components/footer/Footer";
-import Navbar from "@/components/navbar/Navbar";
-import ThemeToggle from "@/components/ThemeToggle/ThemeToggle";
+import { useTheme } from "next-themes";
 import Image from "next/image";
 
 export default function Home() {
+  const { theme, setTheme } = useTheme();
   return (
     <>
       <div
-        className="hidden md:block mt-4"
+        className="hidden md:block mt-8"
         style={{
           position: "fixed",
           width: "100vw",
@@ -18,7 +18,9 @@ export default function Home() {
         }}
       >
         <Image
-          src="/assets/background/Home-background.webp"
+          src={`/assets/background/Home-background-${
+            theme === "dark" ? "dark" : "light"
+          }.webp`}
           layout="fill"
           alt="Home background"
         />

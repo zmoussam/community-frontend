@@ -1,0 +1,50 @@
+.backgroundImg {
+  background: url("/assets/auth/auth.webp") no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.input_group {
+  @apply flex border rounded-md;
+  position: relative;
+}
+
+/* .input_group:focus-within {
+    @apply border-gray-800;
+}
+
+.input_group:focus {
+    @apply border-gray-800;
+} */
+
+.input_text {
+  @apply w-full py-3 px-3 text-sm border rounded-md bg-white;
+  @apply focus:outline-none border-none;
+}
+
+.button {
+  @apply w-full bg-gray-800 rounded-md;
+  @apply py-3 text-gray-50 text-sm;
+}
+
+.button:hover {
+  @apply bg-gray-600 border-gray-800;
+  @apply text-gray-50;
+}
+
+.button_custom {
+  @apply w-full border py-3 flex justify-center gap-3 font-normal text-sm hover:bg-gray-200 rounded;
+}
+
+.input_text + * {
+  color: #cbd5e1;
+}
+
+.input_text:focus + * {
+  @apply text-gray-800 border-gray-800;
+}
+
+.input_text:not([type="email"]) ~ span:hover * {
+  @apply text-gray-500;
+  cursor: pointer;
+}

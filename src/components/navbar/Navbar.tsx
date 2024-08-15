@@ -27,7 +27,7 @@ const Navbar = () => {
             />
           </Link>
         </div>
-        <div className="hidden md:flex md:space-x-8 items-center">
+        <div className="hidden md:flex md:space-x-8 xl:space-x-10 items-center">
           <NavLink href="/" content="Home" />
           <NavLink href="/blogs" content="Blogs" />
           <NavLink href="/about" content="About" />
