@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import ThemeToggle from "@/components/ThemeToggle/ThemeToggle";
 import NavLink from "@/components/navLink/NavLink";
-import Button from "@/components/button/button";
+import Button from "@/components/buttons/button";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,7 +14,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white dark:bg-gray-900 py-2 font-vietnam font-medium fixed px-64 w-full">
+    <nav className="bg-white dark:bg-gray-900 py-2 font-vietnam font-medium fixed px-64 w-full top-0">
       <div className="flex items-center justify-between h-16">
         <div className="flex items-center">
           <Link href="/">

@@ -16,6 +16,37 @@ a {
   @apply text-inherit no-underline;
 }
 
+/* styles/animations.css */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.title-fadeIn {
+  animation: fadeIn 1s ease-out;
+}
+
+.title-slideIn {
+  animation: slideIn 1s ease-out;
+}
+
 /* Container styles */
 /* .container {
   @apply min-h-screen bg-bg text-textColor;

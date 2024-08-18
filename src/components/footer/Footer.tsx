@@ -11,6 +11,7 @@ const Footer = () => {
           <NavLink href="/blogs" content="Blogs" />
           <NavLink href="/about" content="About" />
           <NavLink href="/contact" content="Contact us" />
+          <NavLink href="/privacy" content="Privacy" />
           <NavLink href="/signin" content="Sign in" />
         </div>
         <div className="dark:text-gray-200">

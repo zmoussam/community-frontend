@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className}  " dark:bg-gray-900 `}>
+      <body className={`${inter.className}  "  bg-[#F1F1F1] dark:bg-gray-900`}>
         <ThemeProvider attribute="class">
           <Navbar />
           {children}
