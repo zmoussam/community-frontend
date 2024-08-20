@@ -37,7 +37,7 @@ const TypewriterEffect: React.FC = () => {
   };
 
   return (
-    <h1 className="text-h1 font-bold text-center ">{renderTextWithColor()}</h1>
+    <h1 className="text-h1 font-bold text-center">{renderTextWithColor()}</h1>
   );
 };
 

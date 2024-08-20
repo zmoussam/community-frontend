@@ -7,7 +7,7 @@ interface BlogArticleProps {
   category: string;
 }
 
-const Miniblog: React.FC<BlogArticleProps> = ({
+const BlogCard: React.FC<BlogArticleProps> = ({
   imageSrc,
   title,
   description,
@@ -27,12 +27,15 @@ const Miniblog: React.FC<BlogArticleProps> = ({
         height={300}
       />
       <div className="px-4 py-3 flex flex-col gap-2">
-        <div className="text-xs">august 04 2024</div>
+        <div className="w-full flex justify-between items-center">
+          <div className="text-xs">august 04 2024</div>
+          <div className="text-xs font-semibold uppercase tracking-wide text-indigo-600 dark:bg-gray-900 bg-white shadow-md self-start px-2 py-1 rounded-[12px]">
+            {category}
+          </div>
+        </div>
         <div className="text-lg font-semibold ">{title}</div>
         <p className="  text-paragraph font-vietnam">{description}</p>
-        <div className="text-xs font-semibold uppercase tracking-wide text-indigo-600 dark:bg-gray-900 bg-white shadow-md self-start px-2 py-1 rounded-[12px]">
-          {category}
-        </div>
+
         <button className="text-black text-sm opacity-50 hover:opacity-100 self-start dark:text-gray-400 underline">
           Read More
         </button>
@@ -110,4 +113,4 @@ const Miniblog: React.FC<BlogArticleProps> = ({
   );
 };
 
-export default Miniblog;
+export default BlogCard;

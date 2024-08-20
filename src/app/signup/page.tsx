@@ -19,7 +19,7 @@ const Signup = () => {
   return (
     <div className="h-screen">
       <div className=" h-full">
-        <div className=" h-full px-40  dark:bg-gray-900 flex items-center justify-center text-center">
+        <div className=" h-full px-40 bg-white dark:bg-gray-900 flex items-center justify-center text-center">
           <div className="  h-full w-1/3 flex flex-col items-center px-10 justify-center gap-8 ">
             <div className="text-center">
               <div className="font-vietnam text-h2 font-bold mb-3 whitespace-nowrap">
