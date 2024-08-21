@@ -38,11 +38,11 @@ const Blogs = () => {
                       <p className="text-base text-gray-500 dark:text-gray-400">
                         Graphic Designer, educator & CEO Flowbite
                       </p>
-                      <p className="text-base text-gray-500 dark:text-gray-400">
-                        <div className="text-base text-gray-500 dark:text-gray-400">
+                      <div className="text-base text-gray-500 dark:text-gray-400">
+                        <p className="text-base text-gray-500 dark:text-gray-400">
                           Feb. 8, 2022
-                        </div>
-                      </p>
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </address>

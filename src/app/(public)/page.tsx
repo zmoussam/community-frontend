@@ -3,7 +3,7 @@ import Button from "@/components/buttons/button";
 import Footer from "@/components/footer/Footer";
 import { useTheme } from "next-themes";
 import Image from "next/image";
-import "./globals.css";
+import "../globals.css";
 import TypewriterEffect from "@/components/title-with-animation/TypewriterEffect";
 
 export default function Home() {

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import classes from "./article.module.css";
+
 interface BlogArticleProps {
   imageSrc: string;
   title: string;

@@ -4,7 +4,7 @@ import NavLink from "../navLink/NavLink";
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   return (
-    <div className=" bg-[#F0F0F0] dark:bg-[#242424] text-sm text-[#808080] border-t border-black">
+    <div className=" bg-[#F0F0F0] dark:bg-[#242424] text-sm text-[#808080] border-t border-black  bottom-0 w-full">
       <div className="flex justify-between items-center h-16 px-16">
         <div className="dark:text-gray-200 flex justify-between w-1/4">
           <NavLink href="/" content="Home" />

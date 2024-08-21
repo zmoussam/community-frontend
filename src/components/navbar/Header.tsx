@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
+import { useTheme } from "next-themes";
 import { IoMdNotifications } from "react-icons/io";
 import Link from "next/link";
 import ThemeToggle from "@/components/ThemeToggle/ThemeToggle";
@@ -9,6 +10,7 @@ import NavLink from "@/components/navLink/NavLink";
 import Button from "@/components/buttons/button";
 
 const Header = () => {
+  const { theme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
 
@@ -21,12 +23,14 @@ const Header = () => {
   };
 
   return (
-    <nav className="bg-white dark:bg-gray-900 py-2 font-vietnam font-medium fixed px-64 w-full top-0">
+    <nav className="bg-white dark:bg-gray-900 py-2 font-vietnam font-medium fixed px-64 w-full top-0 border-b dark:border-gray-500">
       <div className="flex items-center justify-between h-16">
         <div className="flex items-center">
           <Link href="/">
             <Image
-              src="/assets/logo/logo.png" // Replace with your logo image path
+              src={`/assets/logo/logo-${
+                theme === "dark" ? "dark" : "light"
+              }.png`} // Replace with your logo image path
               alt="Logo"
               width={150}
               height={250}
@@ -38,7 +42,7 @@ const Header = () => {
           <button
             type="button"
             onClick={() => console.log("test")}
-            className="text-black dark:text-white border border-gray-500 hover:bg-black hover:bg-opacity-70  font-medium rounded-lg text-sm px-5 py-2.5 me-2  dark:bg-gray-800 dark:hover:bg-gray-700  dark:border-gray-700"
+            className="text-black dark:text-white border border-gray-500 hover:bg-black hover:bg-opacity-10  font-medium rounded-lg text-sm px-5 py-2.5 me-2  dark:bg-gray-800 dark:hover:bg-gray-700  dark:border-gray-700"
           >
             New Story
           </button>
