@@ -1,18 +1,23 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
+import { IoMdNotifications } from "react-icons/io";
 import Link from "next/link";
-import { useTheme } from "next-themes";
 import ThemeToggle from "@/components/ThemeToggle/ThemeToggle";
+import { FiChevronDown } from "react-icons/fi";
 import NavLink from "@/components/navLink/NavLink";
 import Button from "@/components/buttons/button";
 
-const Navbar = () => {
+const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { theme, setTheme } = useTheme();
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+
+  const toggleProfileMenu = () => {
+    setProfileMenuOpen(!profileMenuOpen);
   };
 
   return (
@@ -21,9 +26,7 @@ const Navbar = () => {
         <div className="flex items-center">
           <Link href="/">
             <Image
-              src={`/assets/logo/logo-${
-                theme === "dark" ? "dark" : "light"
-              }.png`} // Replace with your logo image path
+              src="/assets/logo/logo.png" // Replace with your logo image path
               alt="Logo"
               width={150}
               height={250}
@@ -32,13 +35,57 @@ const Navbar = () => {
           </Link>
         </div>
         <div className="hidden md:flex md:space-x-8 xl:space-x-10 items-center">
-          <NavLink href="/" content="Home" />
-          <NavLink href="/blogs" content="Blogs" />
-          <NavLink href="/about" content="About" />
-          <NavLink href="/contact" content="Contact us" />
-          <NavLink href="/signin" content="Sign in" />
-          <Button content="Write Story" action={() => console.log("test")} />
-          <ThemeToggle />
+          <button
+            type="button"
+            onClick={() => console.log("test")}
+            className="text-black dark:text-white border border-gray-500 hover:bg-black hover:bg-opacity-70  font-medium rounded-lg text-sm px-5 py-2.5 me-2  dark:bg-gray-800 dark:hover:bg-gray-700  dark:border-gray-700"
+          >
+            New Story
+          </button>
+          <button className="cursor-pointer">
+            <IoMdNotifications size={32} />
+          </button>
+          <div className="relative">
+            <button onClick={toggleProfileMenu} className="flex items-center">
+              <Image
+                className="mr-4 w-11 h-11 rounded-full"
+                src="/assets/authors/costomer1.jpg"
+                alt="Jese Leos"
+                width={40}
+                height={40}
+              />
+              <FiChevronDown
+                className="ml-2 text-gray-600 dark:text-gray-300"
+                size={20}
+              />
+            </button>
+            {profileMenuOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-lg py-2">
+                <Link
+                  href="/profile"
+                  className="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
+                >
+                  Visit Profile
+                </Link>
+                <Link
+                  href="/settings"
+                  className="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
+                >
+                  Settings
+                </Link>
+                <button
+                  onClick={() => console.log("Logout")}
+                  className="block w-full text-left px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
+                >
+                  Logout
+                </button>
+                <button className="flex justify-between   items-center w-full px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700">
+                  <span>dark mode</span>
+                  <ThemeToggle />
+                </button>
+              </div>
+            )}
+          </div>
         </div>
         <div className="-mr-2 flex md:hidden">
           <button
@@ -110,34 +157,6 @@ const Navbar = () => {
         </div>
         <div className="flex flex-col items-center justify-center h-full space-y-6">
           <Link
-            href="/"
-            className="text-gray-800 dark:text-gray-200 text-xl hover:text-gray-600 dark:hover:text-gray-400"
-            onClick={toggleMenu}
-          >
-            Home
-          </Link>
-          <Link
-            href="/blogs"
-            className="text-gray-800 dark:text-gray-200 text-xl hover:text-gray-600 dark:hover:text-gray-400"
-            onClick={toggleMenu}
-          >
-            Blogs
-          </Link>
-          <Link
-            href="/about"
-            className="text-gray-800 dark:text-gray-200 text-xl hover:text-gray-600 dark:hover:text-gray-400"
-            onClick={toggleMenu}
-          >
-            About
-          </Link>
-          <Link
-            href="/contact"
-            className="text-gray-800 dark:text-gray-200 text-xl hover:text-gray-600 dark:hover:text-gray-400"
-            onClick={toggleMenu}
-          >
-            Contact
-          </Link>
-          <Link
             href="/signin"
             className="text-gray-800 dark:text-gray-200 text-xl hover:text-gray-600 dark:hover:text-gray-400"
             onClick={toggleMenu}
@@ -151,4 +170,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Header;

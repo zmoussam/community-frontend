@@ -87,7 +87,9 @@ const Signin = () => {
                     Remember me
                   </span>
                 </label>
-                <div className="text-[#1784C5]">Forgot password?</div>
+                <div className="text-[#1784C5] hover:underline  cursor-pointer">
+                  Forgot password?
+                </div>
               </div>
 
               {/* Login Button */}
@@ -102,7 +104,10 @@ const Signin = () => {
 
               <div>
                 Dont have account ?{" "}
-                <Link href="/signup" className="text-[#1784C5]">
+                <Link
+                  href="/signup"
+                  className="text-[#1784C5] hover:underline transition"
+                >
                   {" "}
                   Create account
                 </Link>

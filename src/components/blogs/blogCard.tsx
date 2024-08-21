@@ -36,8 +36,8 @@ const BlogCard: React.FC<BlogArticleProps> = ({
         <div className="text-lg font-semibold ">{title}</div>
         <p className="  text-paragraph font-vietnam">{description}</p>
 
-        <button className="text-black text-sm opacity-50 hover:opacity-100 self-start dark:text-gray-400 underline">
-          Read More
+        <button className="text-black text-sm opacity-50 hover:opacity-100 self-start dark:text-gray-400 hover:underline">
+          Read More &rarr;
         </button>
       </div>
     </div>
