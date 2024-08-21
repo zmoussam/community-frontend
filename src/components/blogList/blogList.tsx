@@ -146,10 +146,10 @@ const BlogList = () => {
   }, [page]);
 
   return (
-    <div className="bg-red-50 -z-10">
-      <div className="flex space-x-4  pb-4   px-10">
+    <div className="col-span-4 py-8">
+      <div className="flex space-x-4 pb-4 px-10">
         <button
-          className={`px-4 py-2 text-black dark:text-white opacity-50  ${
+          className={`px-4 py-2 text-black dark:text-white   ${
             filter === "ALL" ? " opacity-100" : "opacity-50"
           }`}
           onClick={() => setFilter("ALL")}
@@ -185,15 +185,12 @@ const BlogList = () => {
         loadMore={() => setPage((prevPage) => prevPage + 1)}
         hasMore={hasMore}
       >
-        <div className="grid grid-cols-4 px-4 gap-4 ">
-          <div className="col-span-3 pt-8 flex flex-col">
+        <div className="px-4  ">
+          <div className=" pt-8 flex flex-col border-t dark:border-gray-500">
             {blogs.map((blog) => (
               <ArticleCard key={blog.id} blog={blog} />
             ))}
           </div>
-          <aside className=" border-l  pt-8 px-4 relative  dark:border-gray-500 col-span-1 min-h-screen ">
-            <div className="fixed">side</div>
-          </aside>
         </div>
       </InfiniteScroll>
     </div>

@@ -23,7 +23,7 @@ const Header = () => {
   };
 
   return (
-    <nav className="bg-white dark:bg-gray-900 py-2 font-vietnam font-medium fixed px-64 w-full top-0 border-b dark:border-gray-500">
+    <nav className="bg-white dark:bg-gray-900 py-2 z-10 font-vietnam font-medium fixed px-40 w-full top-0 border-b dark:border-gray-500">
       <div className="flex items-center justify-between h-16">
         <div className="flex items-center">
           <Link href="/">
