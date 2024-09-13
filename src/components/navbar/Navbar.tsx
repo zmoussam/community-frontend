@@ -6,6 +6,7 @@ import { useTheme } from "next-themes";
 import ThemeToggle from "@/components/ThemeToggle/ThemeToggle";
 import NavLink from "@/components/navLink/NavLink";
 import Button from "@/components/buttons/button";
+import SignInButton from "../SignInButton";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,7 +37,7 @@ const Navbar = () => {
           <NavLink href="/blogs" content="Blogs" />
           <NavLink href="/about" content="About" />
           <NavLink href="/contact" content="Contact us" />
-          <NavLink href="/signin" content="Sign in" />
+          <SignInButton/>
           <Button content="Write Story" action={() => console.log("test")} />
           <ThemeToggle />
         </div>

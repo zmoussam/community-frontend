@@ -1,9 +1,17 @@
 "use client";
 import Footer from "@/components/footer/Footer";
 import Link from "next/link";
-import React from "react";
+import React, { useRef } from "react";
 import { useState } from "react";
 import { FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
+import { Backend_URL } from "../lib/Constants";
+
+type FormInputs = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+};
 
 const Signup = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -15,6 +23,40 @@ const Signup = () => {
 
   const toggleConfirmPasswordVisibility = () => {
     setConfirmPasswordVisible(!confirmPasswordVisible);
+  };
+
+  const data = useRef<FormInputs>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
+
+  const register = async (event: any) => {
+    event.preventDefault();
+    const res = await fetch(Backend_URL + "/auth/register", {
+      method: "POST",
+      body: JSON.stringify({
+        firstName: data.current.firstName,
+        lastName: data.current.lastName,
+        email: data.current.email,
+        password: data.current.password,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    console.log(data);
+
+    if (!res.ok) {
+      alert(res.statusText);
+      return;
+    }
+
+    const response = await res.json();
+    alert("User Registered!");
+    console.log({ response });
   };
   return (
     <div className="h-screen">
@@ -45,16 +87,31 @@ const Signup = () => {
               <div className="border-t w-2/4 border-black dark:border-gray-300 border-opacity-50"></div>
             </div>
             <form className="w-3/4">
-              {/* Full Name Field */}
+              {/* First Name Field */}
               <div className="mb-4">
                 <div className="flex items-center border rounded-[12px] shadow-sm py-2 px-4 gap-3 bg-gray-100 dark:bg-gray-700">
                   <FaUser className="text-gray-600 dark:text-gray-400 mr-2" />
                   <input
                     className="w-full bg-transparent focus:outline-none text-gray-800 dark:text-white"
                     type="text"
-                    id="fullName"
-                    placeholder="Enter your full name"
+                    id="firstName"
+                    placeholder="Enter your first name"
                     required
+                    onChange={(e) => (data.current.firstName = e.target.value)}
+                  />
+                </div>
+              </div>
+              {/* Last Name Field */}
+              <div className="mb-4">
+                <div className="flex items-center border rounded-[12px] shadow-sm py-2 px-4 gap-3 bg-gray-100 dark:bg-gray-700">
+                  <FaUser className="text-gray-600 dark:text-gray-400 mr-2" />
+                  <input
+                    className="w-full bg-transparent focus:outline-none text-gray-800 dark:text-white"
+                    type="text"
+                    id="lastName"
+                    placeholder="Enter your last name"
+                    required
+                    onChange={(e) => (data.current.lastName = e.target.value)}
                   />
                 </div>
               </div>
@@ -68,6 +125,7 @@ const Signup = () => {
                     id="email"
                     placeholder="Enter your email"
                     required
+                    onChange={(e) => (data.current.email = e.target.value)}
                   />
                 </div>
               </div>
@@ -81,6 +139,7 @@ const Signup = () => {
                     id="password"
                     placeholder="Enter your password"
                     required
+                    onChange={(e) => (data.current.password = e.target.value)}
                   />
                   <button
                     type="button"
@@ -92,29 +151,10 @@ const Signup = () => {
                 </div>
               </div>
 
-              {/* Confirm Password Field */}
-              <div className="mb-4">
-                <div className="flex items-center border rounded-[12px] shadow-sm py-2 px-4 gap-3 bg-gray-100 dark:bg-gray-700">
-                  <FaLock className="text-gray-600 dark:text-gray-400 mr-2" />
-                  <input
-                    className="w-full bg-transparent focus:outline-none text-gray-800 dark:text-white"
-                    type={confirmPasswordVisible ? "text" : "password"}
-                    id="confirmPassword"
-                    placeholder="Confirm your password"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={toggleConfirmPasswordVisibility}
-                    className="ml-2 text-gray-600 dark:text-gray-400 focus:outline-none"
-                  >
-                    {confirmPasswordVisible ? <FaEyeSlash /> : <FaEye />}
-                  </button>
-                </div>
-              </div>
               {/* Login Button */}
               <div className="text-center mb-6">
                 <button
+                  onClick={register}
                   type="submit"
                   className="w-full bg-[#1784C5] hover:bg-[#18567a] text-white font-bold py-2 px-4 rounded-[12px] focus:outline-none focus:shadow-outline"
                 >
