@@ -1,16 +1,17 @@
 "use client";
 import Footer from "@/components/footer/Footer";
+import Login from "@/components/Login";
+import { signIn } from "next-auth/react";
+import { Asul } from "next/font/google";
 import Link from "next/link";
-import React from "react";
+import React, { useRef } from "react";
 import { useState } from "react";
-import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
+
+type Props = {
+  searchParams?: Record<"callbackUrl" | "error", string>;
+};
 
 const Signin = () => {
-  const [passwordVisible, setPasswordVisible] = useState(false);
-
-  const togglePasswordVisibility = () => {
-    setPasswordVisible(!passwordVisible);
-  };
 
   return (
     <div className="h-screen">
@@ -40,79 +41,7 @@ const Signin = () => {
               </div>
               <div className="border-t w-full border-black dark:border-gray-300 border-opacity-50"></div>
             </div>
-            <form className="w-3/4">
-              {/* Email Field */}
-              <div className="mb-6">
-                <div className="flex items-center border rounded-[12px] gap-3 shadow-sm py-2 px-4 bg-gray-100 dark:bg-gray-700">
-                  <FaEnvelope className="text-gray-600 dark:text-gray-400 mr-2" />
-                  <input
-                    className="w-full bg-transparent focus:outline-none text-gray-800 dark:text-white"
-                    type="email"
-                    id="email"
-                    placeholder="Enter your email"
-                    required
-                  />
-                </div>
-              </div>
-
-              {/* Password Field */}
-              <div className="mb-4">
-                <div className="flex items-center border rounded-[12px] shadow-sm py-2 px-4 gap-3 bg-gray-100 dark:bg-gray-700">
-                  <FaLock className="text-gray-600 dark:text-gray-400 mr-2" />
-                  <input
-                    className="w-full bg-transparent focus:outline-none text-gray-800 dark:text-white"
-                    type={passwordVisible ? "text" : "password"}
-                    id="password"
-                    placeholder="Enter your password"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={togglePasswordVisibility}
-                    className="ml-2 text-gray-600 dark:text-gray-400 focus:outline-none"
-                  >
-                    {passwordVisible ? <FaEyeSlash /> : <FaEye />}
-                  </button>
-                </div>
-              </div>
-
-              {/* Remember Me Checkbox */}
-              <div className="mb-6 flex w-full justify-between text-sm px-2">
-                <label className="inline-flex items-center">
-                  <input
-                    type="checkbox"
-                    className="form-checkbox h-4 w-4 text-blue-600"
-                  />
-                  <span className="ml-2 text-gray-700 dark:text-gray-300">
-                    Remember me
-                  </span>
-                </label>
-                <div className="text-[#1784C5] hover:underline  cursor-pointer">
-                  Forgot password?
-                </div>
-              </div>
-
-              {/* Login Button */}
-              <div className="text-center mb-6">
-                <button
-                  type="submit"
-                  className="w-full bg-[#1784C5] hover:bg-[#18567a] text-white font-bold py-2 px-4 rounded-[12px] focus:outline-none focus:shadow-outline"
-                >
-                  Login
-                </button>
-              </div>
-
-              <div>
-                Dont have account ?{" "}
-                <Link
-                  href="/signup"
-                  className="text-[#1784C5] hover:underline transition"
-                >
-                  {" "}
-                  Create account
-                </Link>
-              </div>
-            </form>
+			<Login />
           </div>
         </div>
       </div>
