@@ -7,6 +7,7 @@ import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 type Props = {
   className?: string;
   callbackUrl?: string;
+  error?: string;
 };
 
 export default function Login(props: Props) {
@@ -24,13 +25,18 @@ export default function Login(props: Props) {
     await signIn("credentials", {
       email: email.current,
       password: password.current,
-      redirect: false,
+      redirect: true,
       callbackUrl: props.callbackUrl ?? "http://localhost:3000",
     });
   };
 
   return (
     <div className={props.className}>
+      {/* Error Message */}
+      {!!props.error && (
+        <div className="text-red-500 text-sm mb-4"><p>Invalid email or password</p></div>
+      )}
+
       <form className="w-3/4" onSubmit={onSubmit}>
         {/* Email Field */}
         <div className="mb-6">

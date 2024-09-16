@@ -16,45 +16,74 @@ export const authOptions: NextAuthOptions = {
         password: { label: "password", type: "password" },
       },
       async authorize(credentials, req) {
-        if (!credentials?.email || !credentials?.password) return null;
-        const { email, password } = credentials;
-        const res = await fetch(Backend_URL + "/auth/login", {
-          method: "POST",
-          body: JSON.stringify({
-            email,
-            password,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        if (res.status == 401) {
-          console.log(res.statusText);
+        try {
+          if (!credentials?.email || !credentials?.password) {
+            throw new Error("Email and password are required.");
+          }
+
+          const { email, password } = credentials;
+          const res = await fetch(Backend_URL + "/auth/login", {
+            method: "POST",
+            body: JSON.stringify({ email, password }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          if (!res.ok) {
+            // If the response is not OK, handle the specific status codes
+            const errorData = await res.json();
+            const errorMessage = errorData?.message || res.statusText;
+            console.error(`Error during authentication: ${errorMessage}`);
+            throw new Error(errorMessage); // or return null to gracefully fail
+          }
+
+          const user = await res.json();
+          if (!user) {
+            throw new Error("Invalid user data.");
+          }
+
+          return user;
+        } catch (error: any) {
+          // Log error for debugging and return null to fail authorization
+          console.error("Authorization error:", error.message);
           return null;
         }
-        const user = await res.json();
-        return user;
       },
     }),
   ],
 
   pages: {
     signIn: "/signin",
+	error: "/signin", 
   },
 
   callbacks: {
     async jwt({ user, token }) {
-      if (user) return { ...user, ...token };
-      return token;
+      try {
+        if (user) {
+          return { ...user, ...token };
+        }
+        return token;
+      } catch (error: any) {
+        console.error("JWT callback error:", error.message);
+        throw new Error("JWT processing error.");
+      }
     },
 
     async session({ token, session }) {
-      session.user = token.user;
-      session.token = token.token;
+      try {
+        session.user = token.user;
+        session.token = token.token;
 
-      return session;
+        return session;
+      } catch (error: any) {
+        console.error("Session callback error:", error.message);
+        throw new Error("Session processing error.");
+      }
     },
   },
+
 };
 
 const handler = NextAuth(authOptions);

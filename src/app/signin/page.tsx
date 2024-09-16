@@ -11,7 +11,7 @@ type Props = {
   searchParams?: Record<"callbackUrl" | "error", string>;
 };
 
-const Signin = () => {
+const Signin = (props: Props) => {
 
   return (
     <div className="h-screen">
@@ -41,7 +41,7 @@ const Signin = () => {
               </div>
               <div className="border-t w-full border-black dark:border-gray-300 border-opacity-50"></div>
             </div>
-			<Login />
+			<Login error={props.searchParams?.error} callbackUrl={props.searchParams?.callbackUrl} />
           </div>
         </div>
       </div>
