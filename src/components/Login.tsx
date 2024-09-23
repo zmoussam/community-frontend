@@ -34,10 +34,12 @@ export default function Login(props: Props) {
     <div className={props.className}>
       {/* Error Message */}
       {!!props.error && (
-        <div className="text-red-500 text-sm mb-4"><p>Invalid email or password</p></div>
+        <div className="text-red-500 text-sm mb-4 text-center">
+          <p>Invalid email or password</p>
+        </div>
       )}
 
-      <form className="w-3/4" onSubmit={onSubmit}>
+      <form className="px-4" onSubmit={onSubmit}>
         {/* Email Field */}
         <div className="mb-6">
           <div className="flex items-center border rounded-[12px] gap-3 shadow-sm py-2 px-4 bg-gray-100 dark:bg-gray-700">
@@ -101,7 +103,7 @@ export default function Login(props: Props) {
           </button>
         </div>
 
-        <div>
+        <div className="text-center text-sm">
           Dont have account ?{" "}
           <Link
             href="/signup"

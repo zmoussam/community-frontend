@@ -23,16 +23,16 @@ const SignInButton = () => {
     <div className="flex gap-4 ml-auto items-center">
       <Link
         href={"/api/auth/signin"}
-        className="flex gap-4 ml-auto text-green-600"
-      >
+		className="text-black text-opacity-50 dark:text-white hover:text-black dark:hover:text-gray-400 focus:text-black dark:focus:text-gray-400"
+		>
         Sign In
       </Link>
-      <Link
+      {/* <Link
         href={"/signup"}
         className="flex gap-4 ml-auto bg-green-600 text-green-200 p-2 rounded"
       >
         Sign Up
-      </Link>
+      </Link> */}
     </div>
   );
 };

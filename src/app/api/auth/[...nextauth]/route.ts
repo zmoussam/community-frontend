@@ -2,9 +2,14 @@ import { Backend_URL } from "@/app/lib/Constants";
 import { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 
 export const authOptions: NextAuthOptions = {
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+    }),
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -55,12 +60,25 @@ export const authOptions: NextAuthOptions = {
 
   pages: {
     signIn: "/signin",
-	error: "/signin", 
+    error: "/signin",
   },
 
   callbacks: {
-    async jwt({ user, token }) {
+    async jwt({ user, token, account }) {
       try {
+
+        if (account?.provider === "google") {
+			token.accessToken = account.id_token;
+          	const res = await fetch(Backend_URL + "/auth/google-login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ accessToken: token.accessToken }),
+          });
+		  const user = await res.json();
+		  return user;
+        }
         if (user) {
           return { ...user, ...token };
         }
@@ -83,7 +101,6 @@ export const authOptions: NextAuthOptions = {
       }
     },
   },
-
 };
 
 const handler = NextAuth(authOptions);
