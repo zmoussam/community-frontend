@@ -43,7 +43,7 @@ export default function Home() {
             <Button content="Get Started" action={() => console.log("test")} />
           </div>
         </div>
-        <Footer />
+        {/* <Footer /> */}
       </div>
     </>
   );

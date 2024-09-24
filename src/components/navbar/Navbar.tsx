@@ -19,7 +19,7 @@ const Navbar = () => {
   return (
     <nav className="bg-white dark:bg-black py-2 font-vietnam font-medium fixed px-64 w-full top-0">
       <div className="flex items-center justify-between h-16">
-        <div className="flex items-center">
+        <div className="">
           <Link href="/">
             <Image
               src={`/assets/logo/logo-${
