@@ -4,8 +4,8 @@ import Link from "next/link";
 import React, { useRef } from "react";
 import { useState } from "react";
 import { FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
-import { Backend_URL } from "../lib/Constants";
 import { signIn } from "next-auth/react";
+import { Backend_URL } from "@/app/lib/Constants";
 
 type FormInputs = {
   firstName: string;
