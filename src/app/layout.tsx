@@ -5,7 +5,6 @@ import { ThemeProvider } from "next-themes";
 import Navbar from "@/components/navbar/Navbar";
 import Providers from "@/components/Providers";
 import Footer from "@/components/footer/Footer";
-import { useSession } from "next-auth/react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/route";
 import Header from "@/components/navbar/Header";
@@ -25,31 +24,16 @@ export default async function RootLayout({
 }>) {
   const session = await getServerSession(authOptions);
 
-  if (session && session.user)
-    return (
-      <html lang="en">
-        <body className={`${inter.className}  "  bg-[#F1F1F1] dark:bg-black`}>
-          <ThemeProvider attribute="class">
-            <Providers>
-              <Header />
-              {children}
-              {/* <Footer /> */}
-            </Providers>
-          </ThemeProvider>
-        </body>
-      </html>
-    );
-
   return (
     <html lang="en">
-      <body className={`${inter.className}  "  bg-[#F1F1F1] dark:bg-black`}>
-        <ThemeProvider attribute="class">
+      <body className={`${inter.className} bg-[#F1F1F1] dark:bg-black`}>
+        {/* <ThemeProvider attribute="class"> */}
           <Providers>
-            <Navbar />
+            {/* {session && session.user ? <Header /> : <Navbar />} */}
             {children}
             {/* <Footer /> */}
           </Providers>
-        </ThemeProvider>
+        {/* </ThemeProvider> */}
       </body>
     </html>
   );

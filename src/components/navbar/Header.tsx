@@ -64,15 +64,16 @@ const Header = () => {
                 theme === "dark" ? "dark" : "light"
               }.png`} // Replace with your logo image path
               alt="Logo"
-              width={150}
-              height={250}
+              width={250}
+              height={150}
               quality={100}
+			  priority
+			  className="w-auto h-20"
             />
           </Link>
         </div>
         <div className="hidden md:flex md:space-x-8 xl:space-x-10 items-center">
           <button
-            type="button"
             onClick={makeNewStory}
             className="text-black dark:text-white border border-gray-500 hover:bg-black hover:bg-opacity-10  font-medium rounded-lg text-sm px-5 py-2.5 me-2  dark:bg-gray-800 dark:hover:bg-gray-700  dark:border-gray-700"
           >
@@ -115,15 +116,12 @@ const Header = () => {
                 >
                   Sign Out
                 </Link>
-                <button className="flex justify-between   items-center w-full px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700">
-                  <span>dark mode</span>
-                  <ThemeToggle />
-                </button>
               </div>
             )}
           </div>
+			<ThemeToggle />
         </div>
-        <div className="-mr-2 flex md:hidden">
+        {/* <div className="-mr-2 flex md:hidden">
           <button
             onClick={toggleMenu}
             className="bg-gray-200 dark:bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-400 dark:focus:ring-gray-500"
@@ -161,11 +159,11 @@ const Header = () => {
               </svg>
             )}
           </button>
-        </div>
+        </div> */}
       </div>
 
       {/* Mobile menu */}
-      <div
+      {/* <div
         className={`fixed top-0 right-0 z-50 bg-white dark:bg-gray-900 transform transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "translate-x-full"
         } w-2/4 h-full`}
@@ -201,7 +199,7 @@ const Header = () => {
           </Link>
           <ThemeToggle />
         </div>
-      </div>
+      </div> */}
     </nav>
   );
 };
