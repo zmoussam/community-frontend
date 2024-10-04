@@ -6,6 +6,7 @@ import MediumEditor from "medium-editor";
 import "medium-editor/dist/css/medium-editor.css";
 import "medium-editor/dist/css/themes/default.css";
 import "./newStory.css";
+import { createRoot } from "react-dom/client";
 
 export default function NewStoryComponent() {
   const contentEditableRef = useRef<HTMLDivElement | null>(null);
@@ -22,6 +23,22 @@ export default function NewStoryComponent() {
     fileInputRef.current?.click();
   };
 
+  const handleFileInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setOpenTools(false);
+      const localImageUrl = URL.createObjectURL(file)
+	  const ImageComponent = <ImageComp imageUrl={localImageUrl} file={file} />
+	  const wrapperDiv = document.createElement('div')
+	  const root = createRoot(wrapperDiv)
+	  root.render(ImageComponent)
+
+	  contentEditableRef.current?.appendChild(wrapperDiv)
+    }
+  };
+
   const getCaretPosition = () => {
     let x = 0;
     let y = 0;
@@ -34,8 +51,8 @@ export default function NewStoryComponent() {
         const range = selection.getRangeAt(0).cloneRange();
         const rect = range.getClientRects()[0];
         if (rect) {
-          x = rect.left;
-          y = rect.top - 80;
+          x = rect.left + window.screenX;
+          y = rect.top + window.scrollY - 80;
         }
       }
     }
@@ -68,7 +85,6 @@ export default function NewStoryComponent() {
   }, [content]);
 
   useEffect(() => {
-	console.log(window.document)
     if (typeof window.document !== "undefined") {
       const editor = new MediumEditor(".editable", {
         elementsContainer: document.getElementById("container") as HTMLElement,
@@ -136,7 +152,7 @@ export default function NewStoryComponent() {
             onClick={InsertImageComp}
             className={`border-[1.5px] border-green-500 rounded-full block p-[6px] ${
               openTools ? "scale-100 visible" : "scale-0 invisible"
-            } ease-linear duration-100 bg-white`}
+            } ease-linear duration-100 bg-white cursor-pointer`}
           >
             <ImageIcon size={20} className="opacity-60 text-green-800" />
           </span>
@@ -145,18 +161,19 @@ export default function NewStoryComponent() {
             accept="image/*"
             style={{ display: "none" }}
             ref={fileInputRef}
+            onChange={handleFileInputChange}
           />
           <span
             className={`border-[1.5px] border-green-500 rounded-full block p-[6px] ${
               openTools ? "scale-100 visible" : "scale-0 invisible"
-            } ease-linear duration-100 delay-75 bg-white`}
+            } ease-linear duration-100 delay-75 bg-white  cursor-pointer`}
           >
             <MoreHorizontal size={20} className="opacity-60 text-green-800" />
           </span>
           <span
             className={`border-[1.5px] border-green-500 rounded-full block p-[6px] ${
               openTools ? "scale-100 visible" : "scale-0 invisible"
-            } ease-linear duration-100 delay-100 bg-white`}
+            } ease-linear duration-100 delay-100 bg-white  cursor-pointer`}
           >
             <CodeIcon size={20} className="opacity-60 text-green-800" />
           </span>
@@ -165,3 +182,22 @@ export default function NewStoryComponent() {
     </main>
   );
 }
+
+const ImageComp = ({ imageUrl, file }: { imageUrl: string; file: File }) => {
+  const [currentImageUrl, setCurrentImageUrl] = useState<string>(imageUrl);
+  
+  return (
+    <div className="py-3">
+      <div>
+		<img src={currentImageUrl} alt="Image" className="max-w-full h-[450px]" />
+		<div className="text-center text-sm max-w-md mx-auto">
+			<p data-p-placeholder='Type caption for your image'>
+
+			</p>
+
+		</div>
+	  </div>
+	  <p  data-p-placeholder='...'></p>
+    </div>
+  );
+};
