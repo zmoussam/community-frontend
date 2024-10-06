@@ -7,6 +7,7 @@ import "medium-editor/dist/css/medium-editor.css";
 import "medium-editor/dist/css/themes/default.css";
 import "./newStory.css";
 import { createRoot } from "react-dom/client";
+import { ImageUpload } from "@/actions/cloudinary";
 
 export default function NewStoryComponent() {
   const contentEditableRef = useRef<HTMLDivElement | null>(null);
@@ -185,7 +186,24 @@ export default function NewStoryComponent() {
 
 const ImageComp = ({ imageUrl, file }: { imageUrl: string; file: File }) => {
   const [currentImageUrl, setCurrentImageUrl] = useState<string>(imageUrl);
-  
+
+
+  const updateImageUrl = async () => {
+	try {
+		const formData = new FormData();
+		formData.append('file', file)
+		ImageUpload(formData).then((SecureImageUrl) => {
+			setCurrentImageUrl(SecureImageUrl)
+		})
+	} catch (error) {
+		console.log('Error uploading the image', error)
+	}
+  }
+
+  useEffect(() => {
+	updateImageUrl()
+  }, [imageUrl])
+
   return (
     <div className="py-3">
       <div>
