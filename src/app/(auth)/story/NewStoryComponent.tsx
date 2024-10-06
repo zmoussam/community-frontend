@@ -30,14 +30,23 @@ export default function NewStoryComponent() {
     const file = event.target.files?.[0];
     if (file) {
       setOpenTools(false);
-      const localImageUrl = URL.createObjectURL(file)
-	  const ImageComponent = <ImageComp imageUrl={localImageUrl} file={file} />
-	  const wrapperDiv = document.createElement('div')
-	  const root = createRoot(wrapperDiv)
-	  root.render(ImageComponent)
+      const localImageUrl = URL.createObjectURL(file);
+      const ImageComponent = <ImageComp imageUrl={localImageUrl} file={file} />;
+      const wrapperDiv = document.createElement("div");
+      const root = createRoot(wrapperDiv);
+      root.render(ImageComponent);
 
-	  contentEditableRef.current?.appendChild(wrapperDiv)
+      contentEditableRef.current?.appendChild(wrapperDiv);
     }
+  };
+
+  const InsertDivider = () => {
+    const DividerComp = <Divider />;
+    setOpenTools(false);
+    const wrapperDiv = document.createElement("div");
+    const root = createRoot(wrapperDiv);
+    root.render(DividerComp);
+    contentEditableRef.current?.appendChild(wrapperDiv);
   };
 
   const getCaretPosition = () => {
@@ -165,6 +174,7 @@ export default function NewStoryComponent() {
             onChange={handleFileInputChange}
           />
           <span
+            onClick={InsertDivider}
             className={`border-[1.5px] border-green-500 rounded-full block p-[6px] ${
               openTools ? "scale-100 visible" : "scale-0 invisible"
             } ease-linear duration-100 delay-75 bg-white  cursor-pointer`}
@@ -187,35 +197,49 @@ export default function NewStoryComponent() {
 const ImageComp = ({ imageUrl, file }: { imageUrl: string; file: File }) => {
   const [currentImageUrl, setCurrentImageUrl] = useState<string>(imageUrl);
 
-
   const updateImageUrl = async () => {
-	try {
-		const formData = new FormData();
-		formData.append('file', file)
-		ImageUpload(formData).then((SecureImageUrl) => {
-			setCurrentImageUrl(SecureImageUrl)
-		})
-	} catch (error) {
-		console.log('Error uploading the image', error)
-	}
-  }
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      ImageUpload(formData).then((SecureImageUrl) => {
+        setCurrentImageUrl(SecureImageUrl);
+      });
+    } catch (error) {
+      console.log("Error uploading the image", error);
+    }
+  };
 
   useEffect(() => {
-	updateImageUrl()
-  }, [imageUrl])
+    updateImageUrl();
+  }, [imageUrl]);
 
   return (
     <div className="py-3">
       <div>
-		<img src={currentImageUrl} alt="Image" className="max-w-full h-[450px]" />
-		<div className="text-center text-sm max-w-md mx-auto">
-			<p data-p-placeholder='Type caption for your image'>
+        <img
+          src={currentImageUrl}
+          alt="Image"
+          className="max-w-full h-[450px]"
+        />
+        <div className="text-center text-sm max-w-md mx-auto">
+          <p data-p-placeholder="Type caption for your image"></p>
+        </div>
+      </div>
+      <p data-p-placeholder="..."></p>
+    </div>
+  );
+};
 
-			</p>
-
-		</div>
-	  </div>
-	  <p  data-p-placeholder='...'></p>
+const Divider = () => {
+  return (
+    <div className="py-3 w-full">
+      <div
+        className="text-center flex items-center justify-center"
+        contentEditable={false}
+      >
+        <MoreHorizontal size={32} />
+      </div>
+      <p data-p-placeholder="Write your text ..."></p>
     </div>
   );
 };
