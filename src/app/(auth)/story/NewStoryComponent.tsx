@@ -2,23 +2,82 @@
 import { CodeIcon, ImageIcon, MoreHorizontal, Plus } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
-import MediumEditor from "medium-editor";
+import MediumEditor, { delay } from "medium-editor";
 import "medium-editor/dist/css/medium-editor.css";
 import "medium-editor/dist/css/themes/default.css";
 import "./newStory.css";
 import { createRoot } from "react-dom/client";
 import { ImageUpload } from "@/actions/cloudinary";
+import axios from "axios";
+import { Backend_URL } from "@/app/lib/Constants";
+import { useSession } from "next-auth/react";
 
-export default function NewStoryComponent() {
+type Props = {
+  storyId: string;
+  Storycontent: string | null | undefined;
+};
+
+export default function NewStoryComponent({ storyId, Storycontent }: Props) {
+  const session = useSession();
   const contentEditableRef = useRef<HTMLDivElement | null>(null);
   const [openTools, setOpenTools] = useState<boolean>(false);
-
   const [buttonPosition, setbuttonPosition] = useState<{
     top: number;
     left: number;
   }>({ top: 0, left: 0 });
   const [content, setContent] = useState("");
+  const [saving, setSaving] = useState<boolean>(false);
+
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  function debounce<T extends (...args: any[]) => any>(
+    func: T,
+    delay: number
+  ): (...args: Parameters<T>) => void {
+    let timeoutId: ReturnType<typeof setTimeout>;
+
+    return function (this: ThisParameterType<T>, ...args: Parameters<T>): void {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        func.apply(this, args);
+      }, delay);
+    };
+  }
+
+  const debouncedHandleSave = useRef(
+    debounce(() => {
+      handleSave();
+    }, 1000)
+  ).current;
+
+  const handleSave = async () => {
+    const content = contentEditableRef.current?.innerHTML;
+    setSaving(true);
+
+    try {
+      const response = await fetch(Backend_URL + "/posts/" + storyId, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.data?.token}`,
+        },
+        body: JSON.stringify({
+          title: "",
+          subtitle: "",
+          content: content,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+    } catch (error) {
+      console.error("Error in saving:", error);
+    }
+    setSaving(false);
+  };
 
   const InsertImageComp = () => {
     fileInputRef.current?.click();
@@ -31,7 +90,13 @@ export default function NewStoryComponent() {
     if (file) {
       setOpenTools(false);
       const localImageUrl = URL.createObjectURL(file);
-      const ImageComponent = <ImageComp imageUrl={localImageUrl} file={file} />;
+      const ImageComponent = (
+        <ImageComp
+          imageUrl={localImageUrl}
+          file={file}
+          handleSave={debouncedHandleSave}
+        />
+      );
       const wrapperDiv = document.createElement("div");
       const root = createRoot(wrapperDiv);
       root.render(ImageComponent);
@@ -47,6 +112,7 @@ export default function NewStoryComponent() {
     const root = createRoot(wrapperDiv);
     root.render(DividerComp);
     contentEditableRef.current?.appendChild(wrapperDiv);
+    handleSave();
   };
 
   const getCaretPosition = () => {
@@ -74,6 +140,8 @@ export default function NewStoryComponent() {
     const handleInput = () => {
       if (contentEditableRef.current) {
         setContent(contentEditableRef.current.innerText);
+
+        debouncedHandleSave();
       }
     };
 
@@ -117,11 +185,41 @@ export default function NewStoryComponent() {
     }
   }, []);
 
+  //   const [story, setStory] = useState<string>("");
+
+  //   useEffect(() => {
+  //     const fetchStoryById = async () => {
+  //       try {
+  //         const response = await fetch(Backend_URL + "/posts/" + storyId, {
+  //           method: "GET",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //             Authorization: `Bearer ${session.data?.token}`,
+  //           },
+  //         });
+
+  //         if (!response.ok) {
+  //           throw new Error(`HTTP error! status: ${response.status}`);
+  //         }
+
+  //         const result = await response.json();
+  //         console.log(result.content);
+  //         setStory(result.content);
+  //       } catch (error) {
+  //         console.error("Error in getting story:", error);
+  //       }
+  //     };
+  //     fetchStoryById();
+  //   }, []);
+
   return (
     <main
       id="container"
       className="max-w-[800px] mx-auto relative font-mono mt-5"
     >
+      <p className="absolute -top-4 opacity-30">
+        {saving ? "saving..." : "saved"}
+      </p>
       <div
         id="editable"
         ref={contentEditableRef}
@@ -130,8 +228,16 @@ export default function NewStoryComponent() {
         className="outline-none focus:outline-none editable max-w-[800px] prose"
         style={{ whiteSpace: "pre-line" }}
       >
-        <h1 className="font-medium" data-h1-placeholder="Title"></h1>
-        <p data-p-placeholder="Write you story ..."></p>
+        {Storycontent ? (
+          <>
+            <div dangerouslySetInnerHTML={{ __html: Storycontent }}></div>
+          </>
+        ) : (
+          <>
+            <h1 className="font-medium" data-h1-placeholder="Title"></h1>
+            <p data-p-placeholder="Write you story ..."></p>
+          </>
+        )}
       </div>
       <div
         className={`z-10 ${buttonPosition.top === 0 ? "hidden" : ""}`}
@@ -181,27 +287,28 @@ export default function NewStoryComponent() {
           >
             <MoreHorizontal size={20} className="opacity-60 text-green-800" />
           </span>
-          <span
-            className={`border-[1.5px] border-green-500 rounded-full block p-[6px] ${
-              openTools ? "scale-100 visible" : "scale-0 invisible"
-            } ease-linear duration-100 delay-100 bg-white  cursor-pointer`}
-          >
-            <CodeIcon size={20} className="opacity-60 text-green-800" />
-          </span>
         </div>
       </div>
     </main>
   );
 }
 
-const ImageComp = ({ imageUrl, file }: { imageUrl: string; file: File }) => {
+const ImageComp = ({
+  imageUrl,
+  file,
+  handleSave,
+}: {
+  imageUrl: string;
+  file: File;
+  handleSave: () => void;
+}) => {
   const [currentImageUrl, setCurrentImageUrl] = useState<string>(imageUrl);
 
   const updateImageUrl = async () => {
     try {
       const formData = new FormData();
       formData.append("file", file);
-      ImageUpload(formData).then((SecureImageUrl) => {
+      await ImageUpload(formData).then((SecureImageUrl) => {
         setCurrentImageUrl(SecureImageUrl);
       });
     } catch (error) {
@@ -210,7 +317,9 @@ const ImageComp = ({ imageUrl, file }: { imageUrl: string; file: File }) => {
   };
 
   useEffect(() => {
-    updateImageUrl();
+    updateImageUrl().then(() => {
+      handleSave();
+    });
   }, [imageUrl]);
 
   return (
