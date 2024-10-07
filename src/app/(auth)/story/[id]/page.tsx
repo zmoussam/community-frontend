@@ -2,9 +2,9 @@ import React from 'react'
 import NewStory from '../NewStory'
 import Navbar from '@/components/navbar/Navbar'
 import { Backend_URL } from '@/app/lib/Constants';
-import { useSession } from 'next-auth/react';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import NavbarStory from '../NavbarStory';
 
 export default async function page({params}: {params: {id: string}}) {
 
@@ -27,7 +27,7 @@ export default async function page({params}: {params: {id: string}}) {
 
   return (
 	<div className='max-w-[1000px] mx-auto'>
-		<Navbar />
+		<NavbarStory />
 		<NewStory storyId={params.id} Storycontent={story} />
 	</div>
   )

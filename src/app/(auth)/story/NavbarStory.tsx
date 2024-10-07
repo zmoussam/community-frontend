@@ -4,13 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import NavLink from "@/components/navLink/NavLink";
-import SignInButton from "../SignInButton";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Backend_URL } from "@/app/lib/Constants";
 import { FiChevronDown } from "react-icons/fi";
+import SignInButton from "@/components/SignInButton";
 
-const Navbar = () => {
+const NavbarStory = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
@@ -133,61 +133,18 @@ const Navbar = () => {
               className="w-auto h-14"
             />
           </Link>
-          <div className="hidden md:block ml-4">
-            <div className="bg-[#F0F0F0] w-[240px] rounded-2xl flex items-center">
-              <div className="inline-block"></div>
-              <div className="mx-3 flex">
-                <svg
-                  width="21"
-                  height="21"
-                  viewBox="0 0 21 21"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M15.0833 13.3333H14.1617L13.835 13.0183C14.9783 11.6883 15.6667 9.96167 15.6667 8.08333C15.6667 3.895 12.2717 0.5 8.08333 0.5C3.895 0.5 0.5 3.895 0.5 8.08333C0.5 12.2717 3.895 15.6667 8.08333 15.6667C9.96167 15.6667 11.6883 14.9783 13.0183 13.835L13.3333 14.1617V15.0833L19.1667 20.905L20.905 19.1667L15.0833 13.3333ZM8.08333 13.3333C5.17833 13.3333 2.83333 10.9883 2.83333 8.08333C2.83333 5.17833 5.17833 2.83333 8.08333 2.83333C10.9883 2.83333 13.3333 5.17833 13.3333 8.08333C13.3333 10.9883 10.9883 13.3333 8.08333 13.3333Z"
-                    fill="black"
-                  />
-                </svg>
-              </div>
-              <input
-                type="text"
-                className="bg-transparent py-[10px] pr-5 text-sm outline-none border-none w-full "
-                placeholder="Search"
-              />
-            </div>
-          </div>
         </div>
         <div className="hidden md:flex ">
           <div className="mr-8 flex ">
             <button
               onClick={makeNewStory}
-              className="text-black border border-gray-500 hover:bg-black hover:bg-opacity-10  font-medium rounded-lg text-sm px-5 py-2 me-2 "
+              className="text-black border opacity-90 bg-gray-500 border-gray-500 hover:bg-gray-700 hover:opacity-100 duration-100 ease-in   font-medium rounded-lg text-sm px-3 py-1 me-2 "
             >
-              New Story
+              Publish
             </button>
           </div>
         </div>
-        <div className="md:hidden">
-          <div className="mr-8 flex">
-            <Link href={"/search"}>
-              <div className="relative text-sm">
-                <svg
-                  width="21"
-                  height="21"
-                  viewBox="0 0 21 21"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M15.0833 13.3333H14.1617L13.835 13.0183C14.9783 11.6883 15.6667 9.96167 15.6667 8.08333C15.6667 3.895 12.2717 0.5 8.08333 0.5C3.895 0.5 0.5 3.895 0.5 8.08333C0.5 12.2717 3.895 15.6667 8.08333 15.6667C9.96167 15.6667 11.6883 14.9783 13.0183 13.835L13.3333 14.1617V15.0833L19.1667 20.905L20.905 19.1667L15.0833 13.3333ZM8.08333 13.3333C5.17833 13.3333 2.83333 10.9883 2.83333 8.08333C2.83333 5.17833 5.17833 2.83333 8.08333 2.83333C10.9883 2.83333 13.3333 5.17833 13.3333 8.08333C13.3333 10.9883 10.9883 13.3333 8.08333 13.3333Z"
-                    fill="black"
-                  />
-                </svg>
-              </div>
-            </Link>
-          </div>
-        </div>
+
         <div className="mr-8 flex">
           <Link href={"/me/notifications"}>
             <div className="relative flex items-center">
@@ -253,4 +210,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default NavbarStory;
