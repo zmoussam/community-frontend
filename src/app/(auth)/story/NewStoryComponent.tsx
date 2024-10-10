@@ -185,33 +185,6 @@ export default function NewStoryComponent({ storyId, Storycontent }: Props) {
     }
   }, []);
 
-  //   const [story, setStory] = useState<string>("");
-
-  //   useEffect(() => {
-  //     const fetchStoryById = async () => {
-  //       try {
-  //         const response = await fetch(Backend_URL + "/posts/" + storyId, {
-  //           method: "GET",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //             Authorization: `Bearer ${session.data?.token}`,
-  //           },
-  //         });
-
-  //         if (!response.ok) {
-  //           throw new Error(`HTTP error! status: ${response.status}`);
-  //         }
-
-  //         const result = await response.json();
-  //         console.log(result.content);
-  //         setStory(result.content);
-  //       } catch (error) {
-  //         console.error("Error in getting story:", error);
-  //       }
-  //     };
-  //     fetchStoryById();
-  //   }, []);
-
   return (
     <main
       id="container"

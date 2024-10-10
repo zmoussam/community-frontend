@@ -1,53 +1,68 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useTheme } from "next-themes";
 import NavLink from "@/components/navLink/NavLink";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Backend_URL } from "@/app/lib/Constants";
 import { FiChevronDown } from "react-icons/fi";
 import SignInButton from "@/components/SignInButton";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import Select from "react-select";
 
-const NavbarStory = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const { theme, setTheme } = useTheme();
+type Props = {
+  storyId: string;
+  CurrentUserId: string | undefined;
+  CurrentUserFirstName: string | null | undefined;
+  CurrentUserLastName: string | null | undefined;
+  Storycontent: string | null | undefined;
+};
+
+const NavbarStory = ({
+  storyId,
+  CurrentUserFirstName,
+  CurrentUserLastName,
+  CurrentUserId,
+  Storycontent,
+}: Props) => {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
 
   const toggleProfileMenu = () => {
     setProfileMenuOpen(!profileMenuOpen);
   };
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
   const session = useSession();
   const router = useRouter();
-  const makeNewStory = async () => {
+  const [showPopup, setShowPopup] = useState<boolean>(false);
+
+  const PublishStory = async (topics: string[]) => {
     try {
-      const response = await fetch(Backend_URL + "/posts", {
-        method: "POST",
+      const response = await fetch(Backend_URL + "/posts/" + storyId, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${session.data?.token}`,
         },
         body: JSON.stringify({
-          title: "",
-          subtitle: "",
-          content: "",
+          categories: topics,
+		  publish: true,
         }),
       });
+	  console.log({
+		categories: topics,
+		publish: true,
+	  })
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const result = await response.json();
-      router.push(`/story/${result._id}`);
+      router.push(`/published/${result.id}`);
     } catch (error) {
-      console.error("Error creating story:", error);
+      console.log("Error publishing the stroy", error);
     }
   };
 
@@ -60,9 +75,7 @@ const NavbarStory = () => {
               <div className="block">
                 <Link href="/">
                   <Image
-                    src={`/assets/logo/logo-${
-                      theme === "dark" ? "dark" : "light"
-                    }.png`} // Replace with your logo image path
+                    src={`/assets/logo/logo-${"light"}.png`} // Replace with your logo image path
                     alt="Logo"
                     width={250}
                     height={150}
@@ -122,9 +135,7 @@ const NavbarStory = () => {
         <div className="flex-1 basis-auto items-center flex">
           <Link href="/">
             <Image
-              src={`/assets/logo/logo-${
-                theme === "dark" ? "dark" : "light"
-              }.png`} // Replace with your logo image path
+              src={`/assets/logo/logo-${"light"}.png`} // Replace with your logo image path
               alt="Logo"
               width={250}
               height={150}
@@ -137,7 +148,7 @@ const NavbarStory = () => {
         <div className="hidden md:flex ">
           <div className="mr-8 flex ">
             <button
-              onClick={makeNewStory}
+              onClick={() => setShowPopup(!showPopup)}
               className="text-black border opacity-90 bg-gray-500 border-gray-500 hover:bg-gray-700 hover:opacity-100 duration-100 ease-in   font-medium rounded-lg text-sm px-3 py-1 me-2 "
             >
               Publish
@@ -206,8 +217,178 @@ const NavbarStory = () => {
           )}
         </div>
       </div>
+      {showPopup && (
+        <SaveStoryPopUp
+          storyId={storyId}
+          PublishStory={PublishStory}
+          setShowPopUp={setShowPopup}
+          CurrentUserFirstName={CurrentUserFirstName}
+          CurrentUserLastName={CurrentUserLastName}
+          CurrentUserId={CurrentUserId}
+        />
+      )}
     </main>
   );
 };
 
 export default NavbarStory;
+
+type SaveStoryPopUptypes = {
+  storyId: string;
+  PublishStory: (topics: string[]) => void;
+  setShowPopUp: React.Dispatch<React.SetStateAction<boolean>>;
+  CurrentUserId: string | undefined;
+  CurrentUserFirstName: string | null | undefined;
+  CurrentUserLastName: string | null | undefined;
+};
+const SaveStoryPopUp = ({
+  storyId,
+  PublishStory,
+  setShowPopUp,
+  CurrentUserId,
+  CurrentUserFirstName,
+  CurrentUserLastName,
+}: SaveStoryPopUptypes) => {
+  const [story, setStory] = useState<string>();
+  const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
+  const session = useSession();
+
+  useEffect(() => {
+    const fetchStoryById = async () => {
+      try {
+        const response = await fetch(Backend_URL + "/posts/" + storyId, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${session?.data?.token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        setStory(result.content);
+      } catch (error) {
+        console.log("Error fetching the story data", error);
+      }
+    };
+    fetchStoryById();
+  });
+
+  const topics = [
+    { value: "Artificial Intellignece", label: "Artificial Intellignece" },
+    { value: "Python", label: "Python" },
+    { value: "Programming", label: "Programming" },
+    { value: "Fashion", label: "Fashion" },
+    { value: "Wrold", label: "Wrold" },
+    { value: "Politics", label: "Politics" },
+  ];
+
+  if (!story) return null;
+
+  // first 10 words for description
+
+  const stripHtmlTags = (htmlString: string) => {
+    return htmlString.replace(/<[^>]*>/g, "");
+  };
+
+  const contentWithoutH1 = story.replace(/<h1[^>]*>[\s\S]*?<\/h1>/g, "");
+
+  const textWithoutHtml = stripHtmlTags(contentWithoutH1);
+
+  const first10Words = textWithoutHtml.split(/\s+/).slice(0, 10).join(" ");
+
+  // h1 tag for heading
+
+  const h1Match = story.match(/<h1[^>]*>([\s\S]*?)<\/h1>/);
+  const h1Element = h1Match ? h1Match[1] : "";
+
+  const h1ElementWithoutTag = stripHtmlTags(h1Element);
+
+  // image src for Image preview
+  const ImageMatch = story.match(/<img[^>]*src=["']([^"']*)["'][^>]*>/);
+  const imgSrc = ImageMatch ? ImageMatch[1] : "";
+
+  return (
+    <div className="fixed bg-gray-50 w-full z-20 overflow-auto top-0 left-0 right-0 bottom-0">
+      <span
+        onClick={(e) => {
+          e.preventDefault();
+          setShowPopUp(false);
+        }}
+        className="ablsolute top-4 right-6 text-3xl cursor-pointer"
+      >
+        &times;
+      </span>
+      <div className="max-w-[900px] mx-auto md:mt-28 mt-10 grid md:grid-cols-2 grid-cols-1 gap-14">
+        <div className="max-md:hidden">
+          <p className="font-semibold">Story Preview</p>
+          <div className="w-full h-[250px] bg-gray-100 rounded my-3 border-b-[1px] ">
+            {imgSrc && (
+              <Image
+                src={imgSrc}
+                width={250}
+                height={250}
+                alt="Preview Image"
+                className="w-full h-full object-cover"
+              />
+            )}
+          </div>
+          <h1 className="border-b-[1px] text-[18px] font-semibold py-2">
+            {h1ElementWithoutTag}
+          </h1>
+          <p className="border-b-[1px] py-2 text-sm text-neutral-500 pt-3">
+            {first10Words}
+          </p>
+          <p className="font-medium text-sm pt-2">
+            Note:{" "}
+            <span className="font-normal text-neutral-500">
+              Changes will affect how your story appears in public places like
+              Medium's homepage and in subscribers inboxes - not the contents of
+              the story itself.
+            </span>
+          </p>
+        </div>
+        <div>
+          <p className="py-2">
+            Publishing to:{" "}
+            <span>
+              {CurrentUserFirstName} {CurrentUserLastName}
+            </span>
+          </p>
+          <p className="text-sm pb-3 pt-1">
+            Add or change topics (up to 5) so readers know what your stroy is
+            about
+          </p>
+          <Select
+            placeholder="tags"
+            isMulti
+            onChange={(selectedValues) => {
+              const values = selectedValues as {
+                value: string;
+                label: string;
+              }[];
+
+              const stringValues = values.map((value) => value.value);
+
+              setSelectedTopics(stringValues);
+            }}
+            isOptionDisabled={() => selectedTopics?.length >= 5}
+            name="topics"
+            options={topics}
+            className="basic-multi-select"
+            classNamePrefix="Add a topic ..."
+          />
+          <button
+            onClick={() => PublishStory(selectedTopics)}
+            className="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-full text-white text-sm mt-8"
+          >
+			Publish now
+		  </button>
+        </div>
+      </div>
+    </div>
+  );
+};
