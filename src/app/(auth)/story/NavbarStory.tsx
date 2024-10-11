@@ -50,17 +50,12 @@ const NavbarStory = ({
 		  publish: true,
         }),
       });
-	  console.log({
-		categories: topics,
-		publish: true,
-	  })
-
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const result = await response.json();
-      router.push(`/published/${result.id}`);
+      router.push(`/published/${result._id}`);
     } catch (error) {
       console.log("Error publishing the stroy", error);
     }
